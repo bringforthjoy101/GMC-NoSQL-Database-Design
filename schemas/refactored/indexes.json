@@ -1,0 +1,77 @@
+{
+  "products_collection": {
+    "sharding": {
+      "shardKey": { "category": 1 },
+      "strategy": "hashed",
+      "rationale": "Distribute products evenly across shards by category. Popular categories get spread across multiple shards, preventing hotspots."
+    },
+    "indexes": [
+      { "keys": { "category": 1, "price": -1 }, "name": "idx_category_price" },
+      { "keys": { "sku": 1 }, "name": "idx_sku_unique", "unique": true },
+      { "keys": { "name": "text", "description": "text" }, "name": "idx_text_search" },
+      { "keys": { "tags": 1 }, "name": "idx_tags" },
+      { "keys": { "createdAt": -1 }, "name": "idx_created" },
+      { "keys": { "salesMetrics.last30DaysSold": -1 }, "name": "idx_trending", "description": "Trending products by recent sales" },
+      { "keys": { "salesMetrics.revenueLast30Days": -1 }, "name": "idx_revenue_trending", "description": "Top revenue products" }
+    ]
+  },
+  "users_collection": {
+    "replication": {
+      "replicaSet": "3-node across availability zones",
+      "readPreference": "secondaryPreferred",
+      "writeConcern": "majority",
+      "rationale": "Users data is read-heavy (profile lookups). Replication ensures high availability and allows reads from secondaries to reduce primary load."
+    },
+    "indexes": [
+      { "keys": { "email": 1 }, "name": "idx_email_unique", "unique": true },
+      { "keys": { "firstName": 1, "lastName": 1 }, "name": "idx_name" },
+      { "keys": { "loyaltyTier": 1 }, "name": "idx_loyalty", "description": "Segment users by loyalty for marketing" },
+      { "keys": { "orderSummary.totalSpent": -1 }, "name": "idx_top_spenders", "description": "Identify high-value customers" }
+    ]
+  },
+  "orders_collection": {
+    "sharding": {
+      "shardKey": { "createdAt": 1 },
+      "strategy": "ranged",
+      "rationale": "Orders are time-series data. Ranged sharding on createdAt distributes writes evenly and keeps recent orders together for fast dashboard queries."
+    },
+    "replication": {
+      "replicaSet": "3-node with arbiters in each availability zone",
+      "readPreference": "primaryPreferred",
+      "writeConcern": "majority",
+      "rationale": "Order status must be consistent (read from primary), but replicas provide failover availability."
+    },
+    "indexes": [
+      { "keys": { "orderId": 1 }, "name": "idx_orderId_unique", "unique": true },
+      { "keys": { "userId": 1, "createdAt": -1 }, "name": "idx_user_date" },
+      { "keys": { "status": 1, "createdAt": -1 }, "name": "idx_status_date" },
+      { "keys": { "createdAt": -1 }, "name": "idx_created" },
+      { "keys": { "items.productId": 1 }, "name": "idx_product_sales" },
+      { "keys": { "items.category": 1, "createdAt": -1 }, "name": "idx_category_sales", "description": "Category-level sales analytics" },
+      { "keys": { "analyticsSnapshot.dayOfWeek": 1, "totals.total": -1 }, "name": "idx_day_revenue", "description": "Revenue by day-of-week pattern" }
+    ]
+  },
+  "analytics_collections": {
+    "dailySales": {
+      "sharding": { "shardKey": { "date": 1 }, "strategy": "ranged" },
+      "indexes": [
+        { "keys": { "date": -1 }, "name": "idx_date_unique", "unique": true },
+        { "keys": { "totalRevenue": -1 }, "name": "idx_revenue" }
+      ]
+    },
+    "productDailyMetrics": {
+      "sharding": { "shardKey": { "productId": 1 }, "strategy": "hashed" },
+      "indexes": [
+        { "keys": { "productId": 1, "date": -1 }, "name": "idx_product_date", "unique": true },
+        { "keys": { "date": -1, "unitsSold": -1 }, "name": "idx_daily_trending" },
+        { "keys": { "date": -1, "revenue": -1 }, "name": "idx_daily_revenue" }
+      ]
+    },
+    "categoryMonthlyMetrics": {
+      "indexes": [
+        { "keys": { "category": 1, "year": -1, "month": -1 }, "name": "idx_category_month", "unique": true },
+        { "keys": { "year": -1, "month": -1, "totalRevenue": -1 }, "name": "idx_month_revenue" }
+      ]
+    }
+  }
+}

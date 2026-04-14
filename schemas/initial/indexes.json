@@ -1,0 +1,27 @@
+{
+  "products_collection": {
+    "indexes": [
+      { "keys": { "category": 1, "price": -1 }, "name": "idx_category_price", "description": "Browse products by category sorted by price" },
+      { "keys": { "sku": 1 }, "name": "idx_sku_unique", "unique": true, "description": "Fast SKU lookups" },
+      { "keys": { "name": "text", "description": "text" }, "name": "idx_text_search", "description": "Full-text search on product name and description" },
+      { "keys": { "tags": 1 }, "name": "idx_tags", "description": "Filter products by tags" },
+      { "keys": { "stock": 1 }, "name": "idx_stock", "partialFilterExpression": { "stock": { "$lte": 10 } }, "description": "Low stock alerts" },
+      { "keys": { "createdAt": -1 }, "name": "idx_created", "description": "Newest products first" }
+    ]
+  },
+  "users_collection": {
+    "indexes": [
+      { "keys": { "email": 1 }, "name": "idx_email_unique", "unique": true, "description": "Login and lookup by email" },
+      { "keys": { "firstName": 1, "lastName": 1 }, "name": "idx_name", "description": "Admin user search by name" }
+    ]
+  },
+  "orders_collection": {
+    "indexes": [
+      { "keys": { "orderId": 1 }, "name": "idx_orderId_unique", "unique": true, "description": "Fast order lookups" },
+      { "keys": { "userId": 1, "createdAt": -1 }, "name": "idx_user_date", "description": "User's order history" },
+      { "keys": { "status": 1, "createdAt": -1 }, "name": "idx_status_date", "description": "Dashboard: filter orders by status" },
+      { "keys": { "createdAt": -1 }, "name": "idx_created", "description": "Recent orders query" },
+      { "keys": { "items.productId": 1 }, "name": "idx_product_sales", "description": "Track which products sell most" }
+    ]
+  }
+}

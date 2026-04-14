@@ -1,0 +1,50 @@
+{
+  "_id": "ObjectId",
+  "orderId": "string (unique, indexed)",
+  "userId": "ObjectId (ref: users, indexed)",
+  "customerSnapshot": {
+    "email": "string",
+    "firstName": "string",
+    "lastName": "string",
+    "phone": "string"
+  },
+  "items": [
+    {
+      "productId": "ObjectId (ref: products)",
+      "productName": "string (denormalized)",
+      "sku": "string (denormalized)",
+      "price": "number",
+      "quantity": "number",
+      "subtotal": "number"
+    }
+  ],
+  "totals": {
+    "subtotal": "number",
+    "tax": "number",
+    "shipping": "number",
+    "discount": "number",
+    "total": "number"
+  },
+  "shippingAddress": {
+    "street": "string",
+    "city": "string",
+    "state": "string",
+    "zip": "string",
+    "country": "string"
+  },
+  "status": "string (pending|confirmed|processing|shipped|delivered|cancelled, indexed)",
+  "statusHistory": [
+    {
+      "status": "string",
+      "timestamp": "date",
+      "note": "string"
+    }
+  ],
+  "payment": {
+    "method": "string",
+    "transactionId": "string",
+    "paidAt": "date"
+  },
+  "createdAt": "date (indexed)",
+  "updatedAt": "date"
+}

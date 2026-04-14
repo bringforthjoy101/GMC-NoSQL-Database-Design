@@ -1,0 +1,31 @@
+{
+  "_id": "ObjectId",
+  "name": "string (required)",
+  "description": "string",
+  "price": "number (required, > 0)",
+  "category": "string (required, sharding key)",
+  "subcategory": "string",
+  "tags": ["string"],
+  "sku": "string (required, unique)",
+  "stock": "number (>= 0)",
+  "imageUrl": "string",
+  "attributes": {
+    "color": "string",
+    "size": "string",
+    "weight": "number",
+    "brand": "string"
+  },
+  "ratings": {
+    "average": "number",
+    "count": "number"
+  },
+  "salesMetrics": {
+    "totalSold": "number",
+    "last7DaysSold": "number",
+    "last30DaysSold": "number",
+    "revenueTotal": "number",
+    "revenueLast30Days": "number"
+  },
+  "createdAt": "date",
+  "updatedAt": "date"
+}

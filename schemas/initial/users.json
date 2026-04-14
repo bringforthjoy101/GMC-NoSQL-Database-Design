@@ -1,0 +1,34 @@
+{
+  "_id": "ObjectId",
+  "email": "string (required, unique, indexed)",
+  "firstName": "string (required)",
+  "lastName": "string (required)",
+  "phone": "string",
+  "addresses": [
+    {
+      "type": "string (home|work|billing|shipping)",
+      "street": "string",
+      "city": "string",
+      "state": "string",
+      "zip": "string",
+      "country": "string",
+      "isDefault": "boolean"
+    }
+  ],
+  "paymentMethods": [
+    {
+      "type": "string (card|paypal|bank)",
+      "last4": "string",
+      "expiryMonth": "string",
+      "expiryYear": "string",
+      "isDefault": "boolean"
+    }
+  ],
+  "preferences": {
+    "currency": "string (default: USD)",
+    "language": "string (default: en)",
+    "newsletter": "boolean"
+  },
+  "createdAt": "date",
+  "updatedAt": "date"
+}

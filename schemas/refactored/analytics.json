@@ -1,0 +1,44 @@
+{
+  "dailySales": {
+    "_id": "ObjectId",
+    "date": "date (unique, indexed)",
+    "totalOrders": "number",
+    "totalRevenue": "number",
+    "averageOrderValue": "number",
+    "topCategories": [
+      { "category": "string", "orders": "number", "revenue": "number" }
+    ],
+    "topProducts": [
+      { "productId": "ObjectId", "name": "string", "quantity": "number", "revenue": "number" }
+    ],
+    "paymentBreakdown": {
+      "card": "number",
+      "paypal": "number",
+      "bank": "number"
+    },
+    "createdAt": "date",
+    "updatedAt": "date"
+  },
+  "productDailyMetrics": {
+    "_id": "ObjectId",
+    "productId": "ObjectId (ref: products, indexed)",
+    "date": "date (indexed)",
+    "unitsSold": "number",
+    "revenue": "number",
+    "uniqueBuyers": "number",
+    "averageRating": "number",
+    "createdAt": "date"
+  },
+  "categoryMonthlyMetrics": {
+    "_id": "ObjectId",
+    "category": "string (indexed)",
+    "year": "number",
+    "month": "number",
+    "totalOrders": "number",
+    "totalRevenue": "number",
+    "topProducts": [
+      { "productId": "ObjectId", "name": "string", "revenue": "number" }
+    ],
+    "createdAt": "date"
+  }
+}
