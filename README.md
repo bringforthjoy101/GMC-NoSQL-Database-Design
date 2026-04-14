@@ -12,11 +12,11 @@ Designing NoSQL databases based on multiple requirement views: scalability, cons
 │   │   ├── orders.json         # Order schema
 │   │   └── indexes.json        # Index definitions
 │   └── refactored/        # Part 2: Refactored schema
-│       ├── products.json       # Sharded product catalog
-│       ├── users.json          # Replicated user data
-│       ├── orders.json         # Denormalized orders with analytics
+│       ├── products.json       # Sharded product catalog with sales metrics
+│       ├── users.json          # Replicated users with order summary
+│       ├── orders.json         # Denormalized orders with analytics snapshot
 │       ├── analytics.json     # Pre-aggregated analytics collections
-│       └── indexes.json        # Updated index definitions
+│       └── indexes.json        # Updated index definitions with sharding config
 ├── scripts/
 │   ├── setup-initial.js       # MongoDB setup script (initial)
 │   ├── setup-refactored.js    # MongoDB setup script (refactored)
@@ -48,9 +48,9 @@ Designing NoSQL databases based on multiple requirement views: scalability, cons
 - High availability and partition tolerance (CAP theorem: AP)
 
 **Refactoring Strategy:**
-- **Sharding**: Products sharded by category, orders sharded by date
+- **Sharding**: Products sharded by category (hashed), orders sharded by date (ranged)
 - **Replication**: 3-node replica sets across availability zones
-- **Denormalization**: Pre-aggregated analytics collections for fast reporting
+- **Denormalization**: Pre-aggregated analytics collections (dailySales, productDailyMetrics, categoryMonthlyMetrics)
 
 ## Setup
 
